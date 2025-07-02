@@ -50,7 +50,7 @@ public class UserService {
         verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
         tokenRepository.save(verificationToken);
 
-        String link = "http://root:hQKIfclivUVzfKGDUePHdCOYhCETIhMk@mysql.railway.internal:3306/verify?token=" + token;
+        String link = "http://societyparking-production.up.railway.app/verify?token=" + token;
         emailService.sendSimpleMessage(user.getEmail(), "Email Verification",
                 "Click this link to verify: " + link);
 
