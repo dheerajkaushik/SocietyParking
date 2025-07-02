@@ -1,7 +1,7 @@
-[setup]
-packages = ["openjdk17", "maven"]
+[phases.setup]
+nixPkgs = ["openjdk17", "maven"]
 
-[build]
+[phases.build]
 cmds = [
     "cd demo && mvn clean package -DskipTests",
     "cp demo/target/SocietyParking.jar ."
