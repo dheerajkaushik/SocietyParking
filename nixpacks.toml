@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['openjdk17', 'maven']
+
+[start]
+cmd = "java -jar demo/target/your-app-name.jar"
+
+[build]
+cmd = "cd demo && mvn clean package"
