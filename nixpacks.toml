@@ -1,5 +1,5 @@
-[phases.setup]
-nixpacks = ["openjdk17", "maven"]
+[providers]
+packages = ["openjdk17", "maven"]
 
 [phases.build]
 cmds = [
