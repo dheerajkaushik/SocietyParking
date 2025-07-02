@@ -8,6 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootApplication
 public class ParkingApplication implements CommandLineRunner {
 
@@ -18,7 +21,16 @@ public class ParkingApplication implements CommandLineRunner {
 	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ParkingApplication.class, args);
+		SpringApplication app = new SpringApplication(ParkingApplication.class);
+
+		// ✅ Dynamically bind to Railway's assigned port
+		Map<String, Object> props = new HashMap<>();
+		String port = System.getenv("PORT"); // Railway sets this env variable
+		if (port != null) {
+			props.put("server.port", port);
+		}
+		app.setDefaultProperties(props);
+		app.run(args);
 	}
 
 	@Override
