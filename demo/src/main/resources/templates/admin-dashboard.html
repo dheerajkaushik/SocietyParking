@@ -1,0 +1,93 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='Admin Dashboard')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <!--  Alerts -->
+    <div th:if="${success}" class="alert success">
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- 📂 Dashboard Actions -->
+    <div class="admin-section mb-4">
+        <div class="btn-group">
+            <a th:href="@{/admin/bookings}" class="btn btn-outline-primary">📋 Manage Bookings</a>
+            <a href="/admin/analytics" class="btn btn-outline-dark">📈 View Booking Analytics</a>
+            <a href="/admin/booking/new" class="btn btn-primary">➕ Manual Booking</a>
+            <a href="/admin/users" class="btn btn-outline-info">👥 View Registered Users</a>
+
+        </div>
+    </div>
+
+    <!--  Add Slot Form -->
+    <form th:action="@{/admin/slots/add}" method="post" class="form-grid">
+        <div class="form-group">
+            <label for="slotNumber">Slot Number</label>
+            <input type="text" id="slotNumber" name="slotNumber" placeholder="Slot Number" required>
+        </div>
+        <div class="form-group">
+            <label for="wing">Wing</label>
+            <select id="wing" name="wing" required>
+                <option value="" disabled selected>Select Wing</option>
+                <option value="A">Wing A</option>
+                <option value="B">Wing B</option>
+                <option value="C">Wing C</option>
+            </select>
+        </div>
+        <div class="form-group align-self-end">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-primary">Add Slot</button>
+        </div>
+    </form>
+
+    <!--  Slots Table -->
+    <div class="table-responsive">
+        <table class="custom-table mt-4">
+            <thead>
+            <tr>
+                <th>Slot Number</th>
+                <th>Wing</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="slot : ${slots}">
+                <td th:text="${slot.slotNumber}"></td>
+                <td th:text="${slot.wing}"></td>
+                <td>
+                    <span th:if="${slot.active}" class="status active">Active</span>
+                    <span th:unless="${slot.active}" class="status inactive">Inactive</span>
+                </td>
+                <td>
+                    <form th:if="${slot.active}"
+                          th:action="@{/admin/slots/{id}/deactivate(id=${slot.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-danger btn-sm">Deactivate</button>
+                    </form>
+                    <form th:unless="${slot.active}"
+                          th:action="@{/admin/slots/{id}/activate(id=${slot.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-success btn-sm">Activate</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

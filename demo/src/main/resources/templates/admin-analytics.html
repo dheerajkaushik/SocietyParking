@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='Booking Analytics Dashboard')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container mt-5">
+  <h2 class="mb-4">📊 Booking Analytics Dashboard</h2>
+
+  <!-- Total Booking Counts -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Today</h5>
+          <p class="card-text display-4" th:text="${counts.today}">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-info">
+        <div class="card-body">
+          <h5 class="card-title">Last 7 Days</h5>
+          <p class="card-text display-4" th:text="${counts.last7Days}">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">This Month</h5>
+          <p class="card-text display-4" th:text="${counts.thisMonth}">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wing-wise Booking Distribution -->
+  <div class="card mt-4">
+    <div class="card-header">
+      🏢 Wing-wise Bookings
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" th:each="entry : ${byWing}">
+        <strong th:text="${entry.key}">Wing A</strong> :
+        <span th:text="${entry.value}">0</span> bookings
+      </li>
+    </ul>
+  </div>
+
+  <a href="/admin/dashboard" class="btn btn-secondary mt-4">← Back to Dashboard</a>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>
