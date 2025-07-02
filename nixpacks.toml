@@ -2,7 +2,7 @@
 nixPkgs = ['openjdk17', 'maven']
 
 [start]
-cmd = "cd demo && java -jar target/SocietyParking.jar"
+cmd = "java -jar target/SocietyParking.jar"
 
 
 
