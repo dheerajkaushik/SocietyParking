@@ -4,5 +4,9 @@ nixPkgs = ['openjdk17', 'maven']
 [start]
 cmd = "cd demo && java -jar target/SocietyParking.jar"
 
+
+
 [build]
-cmd = "cd demo && mvn clean package -DskipTests"
+cmd = ["cd demo && mvn clean package -DskipTests",
+"cp demo/target/SocietyParking.jar ."
+    ]
