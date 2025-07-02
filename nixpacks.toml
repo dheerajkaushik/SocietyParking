@@ -1,12 +1,11 @@
 [phases.setup]
-nixPkgs = ['openjdk17', 'maven']
+nixpkgs = ["openjdk17", "maven"]
+
+[phases.build]
+cmds = [
+    "cd demo && mvn clean package -DskipTests",
+    "cp demo/target/SocietyParking.jar ."
+]
 
 [start]
 cmd = "java -jar SocietyParking.jar"
-
-
-
-[build]
-cmd = ["cd demo && mvn clean package -DskipTests",
-"cp demo/target/SocietyParking.jar ."
-    ]
