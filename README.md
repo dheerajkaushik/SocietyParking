@@ -2,7 +2,7 @@ Society parking system built in java.
 frontend- thymleaf, html,css
 backend- java, springboot, spring security.
 
-The login screen for admin and users->
+                                        The login screen for admin and users->
 <img width="696" height="577" alt="image" src="https://github.com/user-attachments/assets/4f05535b-f415-41d4-a1ef-b5378786a058" />
 
 Admin dashboard->
@@ -10,10 +10,15 @@ Admin dashboard->
   2. book for guest
   3. manage boookings
   4. slots managements
+  5. 
 <img width="1737" height="844" alt="image" src="https://github.com/user-attachments/assets/4c0282c7-f2d5-498e-88dd-7bdeada6ef8e" />
-Regestered users.
+
+Parking analytics.
 <img width="1646" height="722" alt="image" src="https://github.com/user-attachments/assets/da033a71-9b70-4808-bd90-2a704d5afdee" />
+
+Regestered users.
 <img width="1677" height="603" alt="image" src="https://github.com/user-attachments/assets/e4eda773-3a1b-4ac2-a111-924d75d438b9" />
+
 User dashboard->
   1. book for sekf and guest
   2. canel booking
