@@ -1,0 +1,195 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="layout :: head(title='Booking History')"></head>-->
+<!--<body>-->
+<!--<div th:replace="layout :: header"></div>-->
+
+<!--<div class="container mt-4">-->
+<!--    <h2>My Booking History</h2>-->
+
+<!--    &lt;!&ndash; Success/Error Messages &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success alert-dismissible fade show">-->
+<!--        <span th:text="${success}"></span>-->
+<!--        <button type="button" class="close" data-dismiss="alert">&times;</button>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">-->
+<!--        <span th:text="${error}"></span>-->
+<!--        <button type="button" class="close" data-dismiss="alert">&times;</button>-->
+<!--    </div>-->
+
+<!--    <div class="table-responsive">-->
+<!--        <table class="table table-striped">-->
+<!--            <thead class="thead-dark">-->
+<!--            <tr>-->
+<!--                <th>Booking ID</th>-->
+<!--                <th>Slot Number</th>-->
+<!--                <th>Date</th>-->
+<!--                <th>Start Time</th>-->
+<!--                <th>End Time</th>-->
+<!--                <th>Status</th>-->
+<!--                <th>Guest Info</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="booking : ${bookings}">-->
+<!--                <td th:text="${booking.id}"></td>-->
+<!--                <td th:text="${booking.parkingSlot.slotNumber}"></td>-->
+<!--                <td th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy')}"></td>-->
+<!--                <td th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy HH:mm')}"></td>-->
+<!--                <td th:text="${#temporals.format(booking.endTime, 'dd-MM-yyyy HH:mm')}"></td>-->
+
+<!--                &lt;!&ndash; Booking Status &ndash;&gt;-->
+<!--                <td>-->
+<!--                    <span th:if="${booking.cancelled}" class="badge badge-secondary text-black">Cancelled</span>-->
+<!--                    <span th:if="${!booking.cancelled and booking.endTime.isBefore(#temporals.createNow())}"-->
+<!--                          class="badge badge-info text-black">Completed</span>-->
+<!--                    <span th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}"-->
+<!--                          class="badge badge-success text-black" >Upcoming</span>-->
+<!--                    <span th:if="${!booking.cancelled and booking.startTime.isBefore(#temporals.createNow()) and booking.endTime.isAfter(#temporals.createNow())}"-->
+<!--                          class="badge badge-warning text-black">Ongoing</span>-->
+<!--                </td>-->
+
+<!--                &lt;!&ndash; guest info&ndash;&gt;-->
+<!--                <td>-->
+<!--                    <div th:if="${booking.guestBooking}" style="font-size: 0.85em;">-->
+<!--                        <div><strong>Guest:</strong> <span th:text="${booking.guestName}">N/A</span></div>-->
+<!--                        <div><strong>Vehicle:</strong> <span th:text="${booking.guestVehicleNumber}">N/A</span></div>-->
+<!--                    </div>-->
+<!--                    <span th:if="${!booking.guestBooking}" class="text-muted">Not booked for guest</span>-->
+<!--                </td>-->
+
+<!--                &lt;!&ndash; Actions &ndash;&gt;-->
+<!--                <td>-->
+<!--                    &lt;!&ndash; Cancel Button &ndash;&gt;-->
+<!--                    <form th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}"-->
+<!--                          th:action="@{/booking/{id}/cancel(id=${booking.id})}"-->
+<!--                          method="post"-->
+<!--                          class="d-inline">-->
+<!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+<!--                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>-->
+<!--                    </form>-->
+<!--<br>-->
+<!--                    &lt;!&ndash; Details Button &ndash;&gt;-->
+<!--                    <a th:href="@{/booking/{id}(id=${booking.id})}" class="btn btn-sm btn-info ml-1">Details</a>-->
+
+
+
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div th:replace="layout :: footer"></div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='Booking History')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Booking History</h2>
+
+    <!-- 🔁 Filter Tabs -->
+    <div class="tab-bar">
+        <a th:href="@{/booking/history(filter='all')}"
+           th:classappend="${activeTab == 'all'} ? 'tab active-tab' : 'tab'">
+            All <span class="badge-count" th:text="${totalCount}">0</span>
+        </a>
+        <a th:href="@{/booking/history(filter='active')}"
+           th:classappend="${activeTab == 'active'} ? 'tab active-tab' : 'tab'">
+            Active <span class="badge-count" th:text="${activeCount}">0</span>
+        </a>
+        <a th:href="@{/booking/history(filter='completed')}"
+           th:classappend="${activeTab == 'completed'} ? 'tab active-tab' : 'tab'">
+            Completed <span class="badge-count" th:text="${completedCount}">0</span>
+        </a>
+        <a th:href="@{/booking/history(filter='cancelled')}"
+           th:classappend="${activeTab == 'cancelled'} ? 'tab active-tab' : 'tab'">
+            Cancelled <span class="badge-count" th:text="${cancelledCount}">0</span>
+        </a>
+    </div>
+
+    <!-- ✅ Success/Error Alerts -->
+    <div th:if="${success}" class="alert success">
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- 📄 Table -->
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Slot Number</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th>Recurring</th>
+                <th>Guest Info</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking.id}"></td>
+                <td th:text="${booking.parkingSlot.slotNumber}"></td>
+                <td th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy')}"></td>
+                <td th:text="${#temporals.format(booking.startTime, 'HH:mm')}"></td>
+                <td th:text="${#temporals.format(booking.endTime, 'HH:mm')}"></td>
+
+                <td>
+                    <span th:if="${booking.cancelled}" class="status cancelled">Cancelled</span>
+                    <span th:if="${!booking.cancelled and booking.endTime.isBefore(#temporals.createNow())}"
+                          class="status completed">Completed</span>
+                    <span th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}"
+                          class="status upcoming">Upcoming</span>
+                    <span th:if="${!booking.cancelled and booking.startTime.isBefore(#temporals.createNow()) and booking.endTime.isAfter(#temporals.createNow())}"
+                          class="status ongoing">Ongoing</span>
+                </td>
+                <td>
+                <span th:if="${booking.recurring}" style="font-size: 0.85em;">
+                    <div><strong>Pattern:</strong> <span th:text="${booking.recurrencePattern}">-</span></div>
+                    <div><strong>Until:</strong> <span th:text="${#temporals.format(booking.recurrenceEndDate, 'dd-MM-yyyy')}">-</span></div>
+                </span>
+                    <span th:if="${!booking.recurring}" class="text-muted">No</span>
+                </td>
+
+                <td>
+                    <div th:if="${booking.guestBooking}" style="font-size: 0.85em;">
+                        <div><strong>Guest:</strong> <span th:text="${booking.guestName}">N/A</span></div>
+                        <div><strong>Vehicle:</strong> <span th:text="${booking.guestVehicleNumber}">N/A</span></div>
+                    </div>
+                    <span th:if="${!booking.guestBooking}" class="text-muted">Not booked for guest</span>
+                </td>
+
+                <td>
+                    <!-- Cancel -->
+                    <form th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}"
+                          th:action="@{/booking/{id}/cancel(id=${booking.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                    </form>
+
+                    <!-- Details -->
+                    <a th:href="@{/booking/{id}(id=${booking.id})}" class="btn btn-info btn-sm">Details</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

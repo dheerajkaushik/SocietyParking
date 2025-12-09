@@ -1,0 +1,135 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="~{layout :: head(title='Dashboard')}"></head>-->
+<!--<body>-->
+<!--<div th:replace="~{layout :: header}"></div>-->
+
+<!--<div class="container">-->
+<!--    <h2>Welcome, <span th:text="${user.name}"></span></h2>-->
+
+<!--    <div class="actions">-->
+<!--        <a th:href="@{/booking/new}" class="btn">Book Parking</a>-->
+<!--        <a th:href="@{/booking/history}" class="btn">View Bookings</a>-->
+<!--    </div>-->
+
+<!--    <div th:if="${bookingSuccess}" class="alert success">-->
+<!--        Booking created successfully!-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div th:replace="~{layout :: footer}"></div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout :: head(title='User Dashboard')}"></head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+
+<div class="container mt-4">
+    <div class="row g-4">
+        <!-- LEFT COLUMN -->
+        <div class="col-md-6">
+            <!-- 🧍 User Info Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">👋 Welcome, <span th:text="${user.name}"></span>!</h5>
+                    <hr>
+                    <p>🏠 <strong>Flat:</strong> <span th:text="${user.flatNumber}"></span></p>
+                    <p>🏢 <strong>Wing:</strong> <span th:text="${user.wing}"></span></p>
+                    <p>📧 <strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                </div>
+            </div>
+
+            <!-- 📅 Next Booking -->
+            <div th:if="${nextBooking != null}" class="card border-info mb-4 shadow-sm">
+                <div class="card-header my-custom-header text-white">Upcoming Booking</div>
+                <div class="card-body">
+                    <p><strong>Slot:</strong> <span th:text="${nextBooking.parkingSlot.slotNumber}"></span></p>
+                    <p><strong>Date:</strong> <span th:text="${#temporals.format(nextBooking.startTime, 'dd-MM-yyyy')}"></span></p>
+                    <p><strong>Time:</strong>
+                        <span th:text="${#temporals.format(nextBooking.startTime, 'dd-MM-YYYY HH:mm')}"></span> -
+                        <span th:text="${#temporals.format(nextBooking.endTime, 'dd-MM-YYYY HH:mm')}"></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ✅ Booking Success Flash -->
+            <div th:if="${bookingSuccess}" class="alert alert-success">
+                Booking created successfully!
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+
+        <div class="col-md-6">
+            <!-- 📊 Booking Summary -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">Booking Summary</div>
+                <div class="card-body text-center">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p class="text-muted">Active</p>
+                            <h3 class="text-success" th:text="${activeBookingsCount}">0</h3>
+                        </div>
+                        <div class="col">
+                            <p class="text-muted">Completed</p>
+                            <h3 class="text-primary" th:text="${completedBookingsCount}">0</h3>
+                        </div>
+                        <div class="col">
+                            <p class="text-muted">Cancelled</p>
+                            <h3 class="text-danger" th:text="${cancelledBookingsCount}">0</h3>
+                        </div>
+                    </div>
+
+                    <!-- 🚀 Quick Actions Buttons -->
+
+                </div>
+
+            </div>
+            <div class="text-center">
+            <a href="/booking/new" class="btn btn-primary btn-lg mx-2">Book Parking</a>
+            <a href="/booking/history" class="btn btn-outline-dark btn-lg mx-2">View Bookings</a>
+                </div>
+        </div>
+
+
+        <!-- 👤 Guest Bookings Created By You -->
+    <div th:if="${guestBookings != null and !guestBookings.isEmpty()}" class="card shadow-sm mt-5">
+        <div class="card-header text-white" style="background-color: #008080;">
+            Guest Bookings You Created 🧾
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-sm table-bordered">
+                <thead>
+                <tr>
+                    <th>Guest Name</th>
+                    <th>Vehicle No.</th>
+                    <th>Slot</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="booking : ${guestBookings}">
+                    <td th:text="${booking.guestName}">N/A</td>
+                    <td th:text="${booking.guestVehicleNumber}">N/A</td>
+                    <td th:text="${booking.parkingSlot.slotNumber}">-</td>
+                    <td th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy')}">-</td>
+                    <td>
+                        <span th:text="${#temporals.format(booking.startTime, 'HH:mm')}"></span> -
+                        <span th:text="${#temporals.format(booking.endTime, 'HH:mm')}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

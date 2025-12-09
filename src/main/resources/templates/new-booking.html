@@ -1,0 +1,211 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="layout :: head(title='New Booking')"></head>-->
+<!--<body>-->
+<!--<div th:replace="layout :: header"></div>-->
+
+<!--<div class="container mt-4">-->
+<!--    <h2>New Parking Booking</h2>-->
+
+<!--    <div th:if="${error}" class="alert alert-danger">-->
+<!--        <span th:text="${error}"></span>-->
+<!--    </div>-->
+
+<!--    <form th:action="@{/booking/new}" th:object="${booking}" method="post">-->
+<!--        <div class="form-group">-->
+<!--            <label>Parking Slot</label>-->
+
+<!--            <select th:field="*{slotId}" class="form-control" required>-->
+
+<!--                <option th:each="slot : ${availableSlots}"-->
+<!--                        th:value="${slot.id}"-->
+<!--                        th:text="${slot.slotNumber   + ' (' + slotStatusMap[slot.id] + ')'}"-->
+<!--                        th:style="${slotStatusMap[slot.id].startsWith('Available')} ? 'color: green;' : 'color: red;'">-->
+<!--                Slot-->
+
+<!--                </option>-->
+
+
+<!--            </select>-->
+
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label>Start Date & Time</label>-->
+<!--            <input type="datetime-local" th:field="*{startTime}" class="form-control" required>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label>End Date & Time</label>-->
+<!--            <input type="datetime-local" th:field="*{endTime}" class="form-control" required>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Guest Booking Toggle &ndash;&gt;-->
+<!--        <div class="form-group guest-booking-group">-->
+<!--            <input type="checkbox"-->
+<!--                   th:field="*{guestBooking}"-->
+<!--                   id="guestBookingCheckbox" />-->
+<!--            <label for="guestBookingCheckbox">-->
+<!--                <strong>Book for Guest</strong>-->
+<!--            </label>-->
+<!--        </div>-->
+
+
+
+
+
+
+<!--        &lt;!&ndash; Guest Fields &ndash;&gt;-->
+<!--        <div id="guestFields" style="display: none;">-->
+<!--            <div class="form-group">-->
+<!--                <label>Guest Name</label>-->
+<!--                <input type="text" th:field="*{guestName}" class="form-control">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label>Guest Vehicle Number</label>-->
+<!--                <input type="text" th:field="*{guestVehicleNumber}" class="form-control">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label>Guest Email</label>-->
+<!--                <input type="email" th:field="*{guestEmail}" class="form-control">-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+
+<!--        <button type="submit" class="btn btn-primary">Book Slot</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div th:replace="layout :: footer"></div>-->
+
+<!--&lt;!&ndash; JavaScript to toggle guest fields dynamically &ndash;&gt;-->
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        const checkbox = document.getElementById('guestBookingCheckbox');-->
+<!--        const guestFields = document.getElementById('guestFields');-->
+
+<!--        function toggleGuestFields() {-->
+<!--            guestFields.style.display = checkbox.checked ? 'block' : 'none';-->
+<!--        }-->
+
+<!--        checkbox.addEventListener('change', toggleGuestFields);-->
+
+<!--        // Trigger once on load in case checkbox was pre-checked (e.g. form re-render)-->
+<!--        toggleGuestFields();-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='New Booking')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container mt-4">
+    <h2>New Parking Booking</h2>
+
+    <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/booking/new}" th:object="${booking}" method="post">
+        <div class="form-group">
+            <label>Parking Slot</label>
+            <select th:field="*{slotId}" class="form-control" required>
+                <option th:each="slot : ${availableSlots}"
+                        th:value="${slot.id}"
+                        th:text="${slot.slotNumber + ' (' + slotStatusMap[slot.id] + ')'}"
+                        th:style="${slotStatusMap[slot.id].startsWith('Available')} ? 'color: green;' : 'color: red;'">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Start Date & Time</label>
+            <input type="datetime-local" th:field="*{startTime}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>End Date & Time</label>
+            <input type="datetime-local" th:field="*{endTime}" class="form-control" required>
+        </div>
+
+        <!-- ✅ Guest Booking -->
+        <div class="form-group guest-booking-group">
+            <input type="checkbox" th:field="*{guestBooking}" id="guestBookingCheckbox"/>
+            <label for="guestBookingCheckbox"><strong>Book for Guest</strong></label>
+        </div>
+
+        <!-- Guest Fields -->
+        <div id="guestFields" style="display: none;">
+            <div class="form-group">
+                <label>Guest Name</label>
+                <input type="text" th:field="*{guestName}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Guest Vehicle Number</label>
+                <input type="text" th:field="*{guestVehicleNumber}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Guest Email</label>
+                <input type="email" th:field="*{guestEmail}" class="form-control">
+            </div>
+        </div>
+
+        <!-- ✅ Recurring Booking -->
+        <div class="form-group guest-booking-group mt-4">
+            <input type="checkbox" th:field="*{recurring}" id="recurringCheckbox"/>
+            <label for="recurringCheckbox"><strong>Enable Recurring Booking</strong></label>
+        </div>
+
+        <div id="recurringFields" style="display: none;">
+            <div class="form-group">
+                <label>Repeat every</label>
+                <select th:field="*{recurrencePattern}" class="form-control">
+                    <option value="DAILY">Daily</option>
+                    <option value="WEEKLY">Weekly</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Repeat Until (Date)</label>
+                <input type="date" th:field="*{recurrenceEndDate}" class="form-control">
+            </div>
+        </div>
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <button type="submit" class="btn btn-primary">Book Slot</button>
+    </form>
+</div>
+
+<div th:replace="layout :: footer"></div>
+
+<!-- JavaScript to toggle guest and recurring fields -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const guestCheckbox = document.getElementById('guestBookingCheckbox');
+        const guestFields = document.getElementById('guestFields');
+
+        const recurringCheckbox = document.getElementById('recurringCheckbox');
+        const recurringFields = document.getElementById('recurringFields');
+
+        function toggleFields(checkbox, target) {
+            target.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        guestCheckbox.addEventListener('change', () => toggleFields(guestCheckbox, guestFields));
+        recurringCheckbox.addEventListener('change', () => toggleFields(recurringCheckbox, recurringFields));
+
+        toggleFields(guestCheckbox, guestFields);
+        toggleFields(recurringCheckbox, recurringFields);
+    });
+</script>
+
+</body>
+</html>

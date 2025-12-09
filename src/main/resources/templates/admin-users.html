@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='Registered Users')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container mt-4">
+    <h2>Registered Users</h2>
+
+    <form method="get" action="/admin/users" class="filter-form" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <div>
+            <label for="wing">Filter by Wing:</label>
+            <select name="wing" id="wing" onchange="this.form.submit()">
+                <option value="">-- All Wings --</option>
+                <option value="A" th:selected="${selectedWing == 'A'}">Wing A</option>
+                <option value="B" th:selected="${selectedWing == 'B'}">Wing B</option>
+                <option value="C" th:selected="${selectedWing == 'C'}">Wing C</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="search">Search by Name:</label>
+            <input type="text" name="search" id="search" th:value="${search}" placeholder="Enter name" />
+            <button type="submit" class="btn btn-sm">Search</button>
+        </div>
+    </form>
+
+
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Flat</th>
+                <th>Wing</th>
+                <th>Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phone}"></td>
+                <td th:text="${user.flatNumber}"></td>
+                <td th:text="${user.wing}"></td>
+                <td>
+                    <span th:if="${user.admin}" class="status active">Admin</span>
+                    <span th:if="${!user.admin}" class="status inactive">User</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

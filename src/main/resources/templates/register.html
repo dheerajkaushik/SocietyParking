@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(title='Register')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+
+<div class="container">
+    <h2>Register</h2>
+    <form th:action="@{/user/register}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" th:field="*{email}" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" th:field="*{password}" required>
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" th:field="*{phone}" required>
+        </div>
+        <div class="form-group">
+            <label>Flat Number</label>
+            <input type="text" th:field="*{flatNumber}" required>
+        </div>
+        <div class="form-group">
+            <label>Wing</label>
+            <select th:field="*{wing}" class="form-control" required>
+                <option value="" disabled selected>Select Wing</option>
+                <option value="A">Wing A</option>
+                <option value="B">Wing B</option>
+                <option value="C">Wing C</option>
+                <!-- Add more wings here if needed -->
+            </select>
+        </div>
+        <button type="submit" class="btn">Register</button>
+    </form>
+    <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+</div>
+
+<div th:replace="layout :: footer"></div>
+</body>
+</html>

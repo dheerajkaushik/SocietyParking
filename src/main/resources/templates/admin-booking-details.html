@@ -1,0 +1,157 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="~{layout :: head(title='Booking Details')}"></head>-->
+<!--<body>-->
+<!--<div th:replace="~{layout :: header}"></div>-->
+
+<!--<div class="container mt-4">-->
+<!--    <h2>Booking Details</h2>-->
+
+<!--    <div class="card mt-3">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title">Booking ID: <span th:text="${booking.id}"></span></h5>-->
+
+<!--            <p class="card-text">-->
+<!--                <strong>Slot Number:</strong>-->
+<!--                <span th:text="${booking.parkingSlot.slotNumber}"></span><br>-->
+
+<!--                <strong>Wing:</strong>-->
+<!--                <span th:text="${booking.parkingSlot.wing}"></span><br>-->
+
+<!--                <strong>Date:</strong>-->
+<!--                <span th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy')}"></span><br>-->
+
+<!--                <strong>Start Time:</strong>-->
+<!--                <span th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy HH:mm')}"></span><br>-->
+
+<!--                <strong>End Time:</strong>-->
+<!--                <span th:text="${#temporals.format(booking.endTime, 'dd-MM-yyyy HH:mm')}"></span><br>-->
+
+<!--                <strong>Status:</strong>-->
+<!--                <span th:if="${booking.cancelled}" class="badge badge-secondary">Cancelled</span>-->
+<!--                <span th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}"-->
+<!--                      class="badge badge-success">Upcoming</span>-->
+<!--                <span th:if="${!booking.cancelled and booking.endTime.isBefore(#temporals.createNow())}"-->
+<!--                      class="badge badge-info">Completed</span>-->
+<!--                <span th:if="${!booking.cancelled and booking.startTime.isBefore(#temporals.createNow()) and booking.endTime.isAfter(#temporals.createNow())}"-->
+<!--                      class="badge badge-warning">Ongoing</span><br>-->
+
+<!--                <strong>Booked By:</strong>-->
+<!--                <span th:if="${booking.user != null}">-->
+<!--                    <span th:text="${booking.user.name}"></span> (<span th:text="${booking.user.email}"></span>)-->
+<!--                </span>-->
+<!--                <span th:if="${booking.user == null}" class="text-muted">Society Admin</span><br>-->
+
+<!--                <strong>Phone:</strong>-->
+<!--                <span th:if="${booking.user != null}" th:text="${booking.user.phone}"></span>-->
+<!--                <span th:if="${booking.user == null}" class="text-muted">N/A</span><br>-->
+
+<!--                &lt;!&ndash; Guest Info &ndash;&gt;-->
+<!--            <div th:if="${booking.guestBooking}" class="mt-3 border-top pt-2">-->
+<!--                <h4 class="text-muted">Guest Details</h4>-->
+<!--                <strong>Name:</strong> <span th:text="${booking.guestName}">N/A</span><br>-->
+<!--                <strong>Vehicle Number:</strong> <span th:text="${booking.guestVehicleNumber}">N/A</span><br>-->
+<!--                <strong>Email:</strong> <span th:text="${booking.guestEmail}">N/A</span><br>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Cancellation Info &ndash;&gt;-->
+<!--            <div th:if="${booking.cancelled}" class="mt-3">-->
+<!--                <strong>Cancelled By:</strong> <span th:text="${booking.cancelledBy}"></span><br>-->
+<!--                <strong>Cancelled On:</strong> <span th:text="${#temporals.format(booking.cancellationTime, 'dd-MM-yyyy HH:mm')}"></span><br>-->
+<!--                <strong>Reason:</strong> <span th:text="${booking.cancellationReason}">N/A</span><br>-->
+<!--            </div>-->
+<!--            </p>-->
+
+<!--            <a th:href="@{/admin/bookings}" class="btn btn-primary mt-3">Back to Bookings</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div th:replace="~{layout :: footer}"></div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(title='Booking Details')}"></head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Booking Details</h2>
+
+    <div class="card" style="border: 1px solid #ccc; border-radius: 6px; background: #fff; padding: 1.5rem;">
+        <!-- 🆔 Booking Info -->
+        <h3>Booking ID: <span th:text="${booking.id}"></span></h3>
+        <hr style="margin: 1rem 0;">
+
+        <p>
+            <strong>Slot Number:</strong>
+            <span th:text="${booking.parkingSlot.slotNumber}"></span><br>
+
+            <strong>Wing:</strong>
+            <span th:text="${booking.parkingSlot.wing}"></span><br>
+
+            <strong>Date:</strong>
+            <span th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy')}"></span><br>
+
+            <strong>Start Time:</strong>
+            <span th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy HH:mm')}"></span><br>
+
+            <strong>End Time:</strong>
+            <span th:text="${#temporals.format(booking.endTime, 'dd-MM-yyyy HH:mm')}"></span><br>
+
+            <!-- 🏷️ Status -->
+            <strong>Status:</strong>
+            <span th:if="${booking.cancelled}" class="status cancelled">Cancelled</span>
+            <span th:if="${!booking.cancelled and booking.startTime.isAfter(#temporals.createNow())}" class="status upcoming">Upcoming</span>
+            <span th:if="${!booking.cancelled and booking.endTime.isBefore(#temporals.createNow())}" class="status completed">Completed</span>
+            <span th:if="${!booking.cancelled and booking.startTime.isBefore(#temporals.createNow()) and booking.endTime.isAfter(#temporals.createNow())}" class="status ongoing">Ongoing</span>
+            <br><br>
+
+            <strong>Booked By:</strong>
+            <span th:if="${booking.user != null}">
+                <span th:text="${booking.user.name}"></span> (<span th:text="${booking.user.email}"></span>)
+            </span>
+            <span th:if="${booking.user == null}" class="text-muted">Society Admin</span><br>
+
+            <strong>Phone:</strong>
+            <span th:if="${booking.user != null}" th:text="${booking.user.phone}"></span>
+            <span th:if="${booking.user == null}" class="text-muted">N/A</span>
+        </p>
+        <!--recurring-->
+        <div th:if="${booking.recurring}" class="mt-3 border-top pt-2">
+            <h4 class="text-muted">Recurring Info</h4>
+            <strong>Pattern:</strong> <span th:text="${booking.recurrencePattern}"></span><br>
+            <strong>Until:</strong> <span th:text="${#temporals.format(booking.recurrenceEndDate, 'dd-MM-yyyy')}"></span>
+        </div>
+
+        <!-- 👤 Guest Section -->
+        <div th:if="${booking.guestBooking}" class="mt-3" style="border-top: 1px dashed #ccc; padding-top: 1rem;">
+            <h4>Guest Details</h4>
+            <p>
+                <strong>Name:</strong> <span th:text="${booking.guestName}">N/A</span><br>
+                <strong>Vehicle Number:</strong> <span th:text="${booking.guestVehicleNumber}">N/A</span><br>
+                <strong>Email:</strong> <span th:text="${booking.guestEmail}">N/A</span>
+            </p>
+        </div>
+
+        <!-- ❌ Cancellation -->
+        <div th:if="${booking.cancelled}" class="mt-3" style="border-top: 1px dashed #ccc; padding-top: 1rem;">
+            <h4>Cancellation Info</h4>
+            <p>
+                <strong>Cancelled By:</strong> <span th:text="${booking.cancelledBy}">N/A</span><br>
+                <strong>Cancelled On:</strong> <span th:text="${#temporals.format(booking.cancellationTime, 'dd-MM-yyyy HH:mm')}">N/A</span><br>
+                <strong>Reason:</strong> <span th:text="${booking.cancellationReason}">N/A</span>
+            </p>
+        </div>
+
+        <!-- 🔙 Back Button -->
+        <a th:href="@{/admin/bookings}" class="btn mt-3">← Back to History</a>
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
